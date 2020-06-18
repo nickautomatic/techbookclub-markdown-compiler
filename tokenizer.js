@@ -1,4 +1,4 @@
-const token = (type, value) => ({
+const token = (type, value) => Object.freeze({
   type,
   value,
   length: value ? value.length : undefined,
