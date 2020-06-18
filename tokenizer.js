@@ -2,9 +2,10 @@ const token = (type, value) => Object.freeze({
   type,
   value,
   length: value ? value.length : undefined,
-  isNull: () => (!type || !value),
-  toString: () => `<type: ${type}, value: ${value}>`,
 });
+
+const isNull = (token) => !token.type || !token.value;
+const toString = (token) => `<type: ${token.type}, value: ${token.value}>`;
 
 const simpleScanner = (input) => {
   const TOKEN_TYPES = {
@@ -23,7 +24,7 @@ const textScanner = (input) => {
   for (let i = 0; i < input.length; i++) {
     const char = input[i];
 
-    if (!simpleScanner(char).isNull()) {
+    if (!isNull(simpleScanner(char))) {
       break;
     }
 
@@ -42,7 +43,7 @@ const getToken = (markdown) => {
   for (const scanner of tokenScanners) {
     const nextToken = scanner(markdown);
 
-    if (!nextToken.isNull()) {
+    if (!isNull(nextToken)) {
       return nextToken;
     }
   }
@@ -53,7 +54,7 @@ const getToken = (markdown) => {
 const tokenize = (markdown) => {
   const token = getToken(markdown);
 
-  if (token.isNull()) { return; }
+  if (isNull(token)) { return; }
 
   const remaining = markdown.slice(token.length, markdown.length);
 
