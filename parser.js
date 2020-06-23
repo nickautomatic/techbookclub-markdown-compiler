@@ -9,8 +9,10 @@ const boldNode = (value) => node('BOLD', value, 5);
 const emphasisNode = (value) => node('EMPHASIS', value, 3);
 const textNode = (value) => node('TEXT', value, 1);
 const paragraphNode = (value, consumed) => node('PARAGRAPH', value, consumed);
+const bodyNode = (value, consumed) => node('BODY', value, consumed);
 
 const isNull = (node) => node.type === 'NULL';
+const countConsumed = (nodes) => nodes.reduce((n, node) => n + node.consumed, 0);
 
 const matches = (pattern, tokens) => {
   const tokensToMatch = pattern.split(' ');
@@ -103,10 +105,24 @@ const sentenceAndNewLinesParser = (tokens) => {
     return nullNode();
   }
 
-  const consumed = nodes.reduce((n, node) => n + node.consumed, 0);
+  const consumed = countConsumed(nodes);
 
   if (matches('NEWLINE NEWLINE', tokens.slice(consumed))) {
     return paragraphNode(nodes, consumed + 2);
+  }
+
+  return nullNode();
+}
+
+const paragraphParser = (tokens) => {
+  return matchFirst([sentenceAndNewLinesParser, sentenceParser], tokens);
+}
+
+const bodyParser = (tokens) => {
+  const nodes = matchStar(paragraphParser, tokens);
+
+  if (nodes.length > 0) {
+    return bodyNode(nodes, countConsumed(nodes));
   }
 
   return nullNode();
@@ -121,4 +137,6 @@ module.exports = {
   textParser,
   sentenceParser,
   sentenceAndNewLinesParser,
+  bodyParser,
+  paragraphParser,
 };

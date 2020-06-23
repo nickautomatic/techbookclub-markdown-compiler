@@ -7,6 +7,7 @@ const {
   textParser,
   sentenceParser,
   sentenceAndNewLinesParser,
+  bodyParser,
 } = require('./parser');
 const { tokenize } = require('./tokenizer');
 
@@ -101,6 +102,29 @@ describe('matchStar', () => {
         { type: 'BOLD', value: 'Markdown', consumed: 5 },
       ]);
     });
+  });
+});
+
+describe('bodyParser', () => {
+  it('matches multiple paragraphs', () => {
+    tokens = tokenize('Hello,\n\nHow are **you**?\n\n');
+    const result = bodyParser(tokens);
+
+    expect(result.type).toEqual('BODY');
+  });
+
+  it('matches a final sentence without newlines', () => {
+    tokens = tokenize('Hello,\n\nHow are **you**?');
+    const result = bodyParser(tokens);
+
+    expect(result.type).toEqual('BODY');
+  });
+
+  it('sets the "consumed" count correctly', () => {
+    tokens = tokenize('Hello,\n\nHow are **you**?\n\n');
+    const result = bodyParser(tokens);
+
+    expect(result.consumed).toEqual(12);
   });
 });
 
