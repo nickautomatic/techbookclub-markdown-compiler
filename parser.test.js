@@ -4,6 +4,7 @@ const {
   boldParser,
   emphasisParser,
   textParser,
+  sentenceParser,
 } = require('./parser');
 const { tokenize } = require('./tokenizer');
 
@@ -70,6 +71,18 @@ describe('matchFirst', () => {
 
       expect(node.type).toEqual('NULL');
     });
+  });
+});
+
+describe('sentenceParser', () => {
+  it('matches the first emphasis, bold, or text node', () => {
+    tokens = tokenize('Hello, this is **Markdown**');
+
+    expect(sentenceParser(tokens)).toEqual({
+      type: 'TEXT',
+      value: 'Hello, this is ',
+      consumed: 1,
+    })
   });
 });
 

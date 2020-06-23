@@ -77,10 +77,15 @@ const textParser = (tokens) => {
   return nullNode();
 }
 
+const sentenceParser = (tokens) => {
+  return matchFirst([emphasisParser, boldParser, textParser], tokens);
+}
+
 module.exports = {
   matches,
   matchFirst,
   boldParser,
   emphasisParser,
   textParser,
+  sentenceParser,
 };
