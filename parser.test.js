@@ -1,6 +1,7 @@
 const {
   matches,
   matchFirst,
+  matchStar,
   boldParser,
   emphasisParser,
   textParser,
@@ -70,6 +71,34 @@ describe('matchFirst', () => {
       const node = matchFirst(parsers, tokenize('*_'));
 
       expect(node.type).toEqual('NULL');
+    });
+  });
+});
+
+describe('matchStar', () => {
+  describe('when there are no matches', () => {
+    it('returns an empty array', () => {
+      const result = matchStar(boldParser, tokenize('Hello'));
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('when there is one match', () => {
+    it('returns an array containing one node', () => {
+      const result = matchStar(textParser, tokenize('Hello'));
+      expect(result).toEqual([
+        { type: 'TEXT', value: 'Hello', consumed: 1 }
+      ]);
+    });
+  });
+
+  describe('when there are two consecutive matches', () => {
+    it('returns an array containing two nodes', () => {
+      const result = matchStar(sentenceParser, tokenize('Hello, this is __Markdown__'));
+      expect(result).toEqual([
+        { type: 'TEXT', value: 'Hello, this is ', consumed: 1 },
+        { type: 'BOLD', value: 'Markdown', consumed: 5 },
+      ]);
     });
   });
 });

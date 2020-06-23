@@ -43,6 +43,20 @@ const matchFirst = (parsers, tokens) => {
   return nullNode();
 }
 
+const matchStar = (parser, tokens) => {
+  const node = parser(tokens);
+
+  if (isNull(node)) { return []; }
+
+  const remaining = tokens.slice(node.consumed, tokens.length);
+
+  if (remaining.length) {
+    return [node, ...matchStar(parser, remaining)];
+  }
+
+  return [node];
+}
+
 const boldParser = (tokens) => {
   const patterns = [
     'STAR STAR TEXT STAR STAR',
@@ -84,6 +98,7 @@ const sentenceParser = (tokens) => {
 module.exports = {
   matches,
   matchFirst,
+  matchStar,
   boldParser,
   emphasisParser,
   textParser,
