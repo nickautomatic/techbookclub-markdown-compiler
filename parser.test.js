@@ -1,5 +1,6 @@
 const {
   matches,
+  boldParser,
   textParser,
 } = require('./parser');
 const { tokenize } = require('./tokenizer');
@@ -41,6 +42,28 @@ describe('matches', () => {
     it('returns false when the tokens do not match the pattern', () => {
       expect(matches('UNDERSCORE TEXT STAR', tokens)).toBe(false);
     });
+  });
+});
+
+describe('boldParser', () => {
+  it('matches text enclosed in double asterisks', () => {
+    tokens = tokenize('**Hello**');
+
+    expect(boldParser(tokens)).toEqual({
+      type: 'BOLD',
+      value: 'Hello',
+      consumed: 5,
+    })
+  });
+
+  it('matches text enclosed in double underscores', () => {
+    tokens = tokenize('__Hello__');
+
+    expect(boldParser(tokens)).toEqual({
+      type: 'BOLD',
+      value: 'Hello',
+      consumed: 5,
+    })
   });
 });
 
