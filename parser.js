@@ -6,6 +6,7 @@ const node = (type, value, consumed) => ({
 
 const nullNode = () => node('NULL', null, 0);
 const boldNode = (value) => node('BOLD', value, 5);
+const emphasisNode = (value) => node('EMPHASIS', value, 3);
 const textNode = (value) => node('TEXT', value, 1);
 
 const matches = (pattern, tokens) => {
@@ -41,6 +42,19 @@ const boldParser = (tokens) => {
   return nullNode();
 }
 
+const emphasisParser = (tokens) => {
+   const patterns = [
+    'STAR TEXT STAR',
+    'UNDERSCORE TEXT UNDERSCORE',
+  ];
+
+  if (patterns.some(pattern => matches(pattern, tokens))) {
+    return emphasisNode(tokens[1].value);
+  }
+
+  return nullNode();
+}
+
 const textParser = (tokens) => {
   if (matches('TEXT', tokens)) {
     return textNode(tokens[0].value);
@@ -52,5 +66,6 @@ const textParser = (tokens) => {
 module.exports = {
   matches,
   boldParser,
+  emphasisParser,
   textParser,
 };

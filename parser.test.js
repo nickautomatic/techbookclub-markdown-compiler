@@ -1,6 +1,7 @@
 const {
   matches,
   boldParser,
+  emphasisParser,
   textParser,
 } = require('./parser');
 const { tokenize } = require('./tokenizer');
@@ -63,6 +64,28 @@ describe('boldParser', () => {
       type: 'BOLD',
       value: 'Hello',
       consumed: 5,
+    })
+  });
+});
+
+describe('emphasisParser', () => {
+  it('matches text enclosed in single asterisks', () => {
+    tokens = tokenize('*Hello*');
+
+    expect(emphasisParser(tokens)).toEqual({
+      type: 'EMPHASIS',
+      value: 'Hello',
+      consumed: 3,
+    })
+  });
+
+  it('matches text enclosed in single underscores', () => {
+    tokens = tokenize('_Hello_');
+
+    expect(emphasisParser(tokens)).toEqual({
+      type: 'EMPHASIS',
+      value: 'Hello',
+      consumed: 3,
     })
   });
 });
