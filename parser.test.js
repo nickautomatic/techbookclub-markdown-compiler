@@ -1,5 +1,6 @@
 const {
   matches,
+  matchFirst,
   boldParser,
   emphasisParser,
   textParser,
@@ -7,6 +8,7 @@ const {
 const { tokenize } = require('./tokenizer');
 
 let tokens;
+let parsers;
 
 describe('matches', () => {
   describe('matching a single token', () => {
@@ -42,6 +44,31 @@ describe('matches', () => {
 
     it('returns false when the tokens do not match the pattern', () => {
       expect(matches('UNDERSCORE TEXT STAR', tokens)).toBe(false);
+    });
+  });
+});
+
+describe('matchFirst', () => {
+  describe('given several parsers', () => {
+    beforeEach(() => {
+      parsers = [emphasisParser, boldParser, textParser];
+    });
+
+    it('returns the output of the first parser that matches the input tokens', () => {
+      const tokens = tokenize('Hello, how are __you__?');
+      const node = matchFirst(parsers, tokens);
+
+      expect(node).toEqual({
+        type: 'TEXT',
+        value: 'Hello, how are ',
+        consumed: 1,
+      });
+    });
+
+    it('returns a null node if none of the parsers match', () => {
+      const node = matchFirst(parsers, tokenize('*_'));
+
+      expect(node.type).toEqual('NULL');
     });
   });
 });

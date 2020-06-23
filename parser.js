@@ -9,6 +9,8 @@ const boldNode = (value) => node('BOLD', value, 5);
 const emphasisNode = (value) => node('EMPHASIS', value, 3);
 const textNode = (value) => node('TEXT', value, 1);
 
+const isNull = (node) => node.type === 'NULL';
+
 const matches = (pattern, tokens) => {
   const tokensToMatch = pattern.split(' ');
 
@@ -28,6 +30,18 @@ const matches = (pattern, tokens) => {
 
   return true;
 };
+
+const matchFirst = (parsers, tokens) => {
+  for (const parser of parsers) {
+    const node = parser(tokens);
+
+    if (!isNull(node)) {
+      return node;
+    }
+  }
+
+  return nullNode();
+}
 
 const boldParser = (tokens) => {
   const patterns = [
@@ -65,6 +79,7 @@ const textParser = (tokens) => {
 
 module.exports = {
   matches,
+  matchFirst,
   boldParser,
   emphasisParser,
   textParser,
