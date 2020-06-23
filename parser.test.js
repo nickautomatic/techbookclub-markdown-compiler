@@ -6,6 +6,7 @@ const {
   emphasisParser,
   textParser,
   sentenceParser,
+  sentenceAndNewLinesParser,
 } = require('./parser');
 const { tokenize } = require('./tokenizer');
 
@@ -100,6 +101,29 @@ describe('matchStar', () => {
         { type: 'BOLD', value: 'Markdown', consumed: 5 },
       ]);
     });
+  });
+});
+
+describe('sentenceAndNewLinesParser', () => {
+  it('matches a block of text, bold, or emphasis, followed by two newlines', () => {
+    tokens = tokenize('Hello, this is **Markdown**\n\n')
+    const result = sentenceAndNewLinesParser(tokens);
+
+    expect(result.type).toEqual('PARAGRAPH');
+  });
+
+  it('sets the correct "consumed" value', () => {
+    tokens = tokenize('Hello, this is **Markdown**\n\n')
+    const result = sentenceAndNewLinesParser(tokens);
+
+    expect(result.consumed).toEqual(1 + 5 + 2);
+  });
+
+  it('does not match text that is not followed by two newlines', () => {
+    tokens = tokenize('Hello, this is **Markdown**\n')
+    const result = sentenceAndNewLinesParser(tokens);
+
+    expect(result.type).toEqual('NULL');
   });
 });
 
