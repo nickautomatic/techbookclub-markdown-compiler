@@ -4,14 +4,12 @@ const node = (type, value, consumed) => ({
   consumed,
 });
 
-const nullNode = () => node('NULL', null, 0);
 const boldNode = (value) => node('BOLD', value, 5);
 const emphasisNode = (value) => node('EMPHASIS', value, 3);
 const textNode = (value) => node('TEXT', value, 1);
 const paragraphNode = (value, consumed) => node('PARAGRAPH', value, consumed);
 const bodyNode = (value, consumed) => node('BODY', value, consumed);
 
-const isNull = (node) => node.type === 'NULL';
 const countConsumed = (nodes) => nodes.reduce((n, node) => n + node.consumed, 0);
 
 const matches = (pattern, tokens) => {
@@ -38,18 +36,16 @@ const matchFirst = (parsers, tokens) => {
   for (const parser of parsers) {
     const node = parser(tokens);
 
-    if (!isNull(node)) {
-      return node;
-    }
+    if (node) { return node; }
   }
 
-  return nullNode();
+  return null;
 }
 
 const matchStar = (parser, tokens) => {
   const node = parser(tokens);
 
-  if (isNull(node)) { return []; }
+  if (!node) { return []; }
 
   const remaining = tokens.slice(node.consumed, tokens.length);
 
@@ -70,7 +66,7 @@ const boldParser = (tokens) => {
     return boldNode(tokens[2].value);
   }
 
-  return nullNode();
+  return null;
 }
 
 const emphasisParser = (tokens) => {
@@ -83,7 +79,7 @@ const emphasisParser = (tokens) => {
     return emphasisNode(tokens[1].value);
   }
 
-  return nullNode();
+  return null;
 }
 
 const textParser = (tokens) => {
@@ -91,7 +87,7 @@ const textParser = (tokens) => {
     return textNode(tokens[0].value);
   }
 
-  return nullNode();
+  return null;
 }
 
 const sentenceParser = (tokens) => {
@@ -102,7 +98,7 @@ const sentenceAndNewLinesParser = (tokens) => {
   const nodes = matchStar(sentenceParser, tokens);
 
   if (nodes.length === 0) {
-    return nullNode();
+    return null;
   }
 
   const consumed = countConsumed(nodes);
@@ -111,7 +107,7 @@ const sentenceAndNewLinesParser = (tokens) => {
     return paragraphNode(nodes, consumed + 2);
   }
 
-  return nullNode();
+  return null;
 }
 
 const paragraphParser = (tokens) => {
@@ -125,7 +121,7 @@ const bodyParser = (tokens) => {
     return bodyNode(nodes, countConsumed(nodes));
   }
 
-  return nullNode();
+  return null;
 }
 
 module.exports = {

@@ -72,7 +72,7 @@ describe('matchFirst', () => {
     it('returns a null node if none of the parsers match', () => {
       const node = matchFirst(parsers, tokenize('*_'));
 
-      expect(node.type).toEqual('NULL');
+      expect(node).toBeNull();
     });
   });
 });
@@ -147,7 +147,7 @@ describe('sentenceAndNewLinesParser', () => {
     tokens = tokenize('Hello, this is **Markdown**\n')
     const result = sentenceAndNewLinesParser(tokens);
 
-    expect(result.type).toEqual('NULL');
+    expect(result).toBeNull();
   });
 });
 
@@ -228,11 +228,7 @@ describe('textParser', () => {
     });
 
     it('returns a null node', () => {
-      expect(textParser(tokens)).toEqual({
-        type: 'NULL',
-        value: null,
-        consumed: 0,
-      });
+      expect(textParser(tokens)).toBeNull();
     });
   });
 });
