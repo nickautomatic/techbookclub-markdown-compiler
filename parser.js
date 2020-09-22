@@ -1,4 +1,5 @@
 const { matches, matchFirst, matchStar } = require('./matchers');
+const { tokenize } = require('./tokenizer');
 
 const node = (type, value, consumed) => ({
   type,
@@ -82,6 +83,8 @@ const bodyParser = (tokens) => {
   return null;
 }
 
+const parse = (text) => bodyParser(tokenize(text));
+
 module.exports = {
   boldParser,
   emphasisParser,
@@ -90,4 +93,5 @@ module.exports = {
   sentenceAndNewLinesParser,
   bodyParser,
   paragraphParser,
+  parse,
 };
