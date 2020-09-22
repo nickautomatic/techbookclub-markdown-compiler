@@ -13,23 +13,9 @@ const bodyNode = (value, consumed) => node('BODY', value, consumed);
 const countConsumed = (nodes) => nodes.reduce((n, node) => n + node.consumed, 0);
 
 const matches = (pattern, tokens) => {
-  const tokensToMatch = pattern.split(' ');
-
-  if (tokensToMatch.length === 0 || tokens.length === 0) {
-    return false;
-  }
-
-  if (tokensToMatch.length > tokens.length) {
-    return false;
-  }
-
-  for (let i = 0; i < tokensToMatch.length; i++) {
-    if (tokensToMatch[i] !== tokens[i].type) {
-      return false;
-    }
-  }
-
-  return true;
+  return pattern === tokens.map(token => token.type)
+    .join(' ')
+    .slice(0, pattern.length);
 };
 
 const matchFirst = (parsers, tokens) => {
