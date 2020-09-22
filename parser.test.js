@@ -12,7 +12,10 @@ const {
 const { tokenize } = require('./tokenizer');
 
 let tokens;
-let parsers;
+
+const dummyNode = { type: 'MATCH', consumed: 1 };
+const noMatchParser = () => null;
+const matchParser = () => dummyNode;
 
 describe('matches', () => {
   describe('matching a single token', () => {
@@ -54,25 +57,17 @@ describe('matches', () => {
 
 describe('matchFirst', () => {
   describe('given several parsers', () => {
-    beforeEach(() => {
-      parsers = [emphasisParser, boldParser, textParser];
-    });
-
-    it('returns the output of the first parser that matches the input tokens', () => {
+    it('returns the output of the first parser that returns something', () => {
       const tokens = tokenize('Hello, how are __you__?');
-      const node = matchFirst(parsers, tokens);
+      const match = matchFirst([noMatchParser, matchParser], tokens);
 
-      expect(node).toEqual({
-        type: 'TEXT',
-        value: 'Hello, how are ',
-        consumed: 1,
-      });
+      expect(match).toEqual(dummyNode);
     });
 
     it('returns a null node if none of the parsers match', () => {
-      const node = matchFirst(parsers, tokenize('*_'));
+      const match = matchFirst([noMatchParser], tokenize('*_'));
 
-      expect(node).toBeNull();
+      expect(match).toBeNull();
     });
   });
 });
@@ -80,27 +75,22 @@ describe('matchFirst', () => {
 describe('matchStar', () => {
   describe('when there are no matches', () => {
     it('returns an empty array', () => {
-      const result = matchStar(boldParser, tokenize('Hello'));
+      const result = matchStar(noMatchParser, tokenize('Hello'));
       expect(result).toEqual([]);
     });
   });
 
   describe('when there is one match', () => {
     it('returns an array containing one node', () => {
-      const result = matchStar(textParser, tokenize('Hello'));
-      expect(result).toEqual([
-        { type: 'TEXT', value: 'Hello', consumed: 1 }
-      ]);
+      const result = matchStar(matchParser, tokenize('Hello'));
+      expect(result).toEqual([dummyNode]);
     });
   });
 
   describe('when there are two consecutive matches', () => {
     it('returns an array containing two nodes', () => {
-      const result = matchStar(sentenceParser, tokenize('Hello, this is __Markdown__'));
-      expect(result).toEqual([
-        { type: 'TEXT', value: 'Hello, this is ', consumed: 1 },
-        { type: 'BOLD', value: 'Markdown', consumed: 5 },
-      ]);
+      const result = matchStar(matchParser, [1,2]);
+      expect(result).toEqual([ dummyNode, dummyNode ]);
     });
   });
 });
