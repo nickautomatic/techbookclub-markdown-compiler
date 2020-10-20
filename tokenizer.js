@@ -65,7 +65,7 @@ const tokenize = (markdown) => {
   return [token];
 }
 
-module.exports = {
+export {
   simpleScanner,
   textScanner,
   tokenize

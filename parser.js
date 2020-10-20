@@ -1,5 +1,5 @@
-const { matches, matchFirst, matchStar } = require('./matchers');
-const { tokenize } = require('./tokenizer');
+import { matches, matchFirst, matchStar } from './matchers.js';
+import { tokenize } from './tokenizer.js';
 
 const node = (type, value, consumed) => ({
   type,
@@ -79,7 +79,7 @@ const bodyParser = (tokens) => {
 
 const parse = (text) => bodyParser(tokenize(text));
 
-module.exports = {
+export {
   boldParser,
   emphasisParser,
   textParser,

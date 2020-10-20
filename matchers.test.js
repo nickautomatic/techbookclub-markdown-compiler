@@ -1,5 +1,5 @@
-const { matches, matchFirst, matchStar } = require('./matchers');
-const { tokenize } = require('./tokenizer');
+import { matches, matchFirst, matchStar } from './matchers';
+import { tokenize } from './tokenizer';
 
 const dummyNode = { type: 'MATCH', consumed: 1 };
 const noMatchParser = () => null;

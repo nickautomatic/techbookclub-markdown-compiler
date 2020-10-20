@@ -1,8 +1,8 @@
-const {
+import {
   simpleScanner,
   textScanner,
   tokenize
-} = require('./tokenizer');
+} from './tokenizer.js';
 
 describe('simpleScanner', () => {
   it('matches an initial underscore character', () => {

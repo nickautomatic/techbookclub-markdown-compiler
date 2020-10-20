@@ -5,10 +5,18 @@
   "main": "tokenizer.js",
   "dependencies": {},
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
     "jest": "^26.0.1"
   },
   "scripts": {
     "test": "jest"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": ["@babel/plugin-transform-modules-commonjs"]
+      }
+    }
   },
   "author": "",
   "license": "ISC"

@@ -1,12 +1,12 @@
-const {
+import {
   boldParser,
   emphasisParser,
   textParser,
   sentenceParser,
   sentenceAndNewLinesParser,
   bodyParser,
-} = require('./parser');
-const { tokenize } = require('./tokenizer');
+} from './parser.js';
+import { tokenize } from './tokenizer.js';
 
 let tokens;
 

@@ -28,7 +28,7 @@ const matchStar = (parser, tokens) => {
   return [node];
 }
 
-module.exports = {
+export {
   matches,
   matchFirst,
   matchStar,
