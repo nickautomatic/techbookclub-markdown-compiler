@@ -7,12 +7,6 @@ const node = (type, value, consumed) => ({
   consumed,
 });
 
-const boldNode = (value) => node('BOLD', value, 5);
-const emphasisNode = (value) => node('EMPHASIS', value, 3);
-const textNode = (value) => node('TEXT', value, 1);
-const paragraphNode = (value, consumed) => node('PARAGRAPH', value, consumed);
-const bodyNode = (value, consumed) => node('BODY', value, consumed);
-
 const countConsumed = (nodes) => nodes.reduce((n, node) => n + node.consumed, 0);
 
 const boldParser = (tokens) => {
@@ -22,7 +16,7 @@ const boldParser = (tokens) => {
   ];
 
   if (patterns.some(pattern => matches(pattern, tokens))) {
-    return boldNode(tokens[2].value);
+    return node('BOLD', tokens[2].value, 5);
   }
 
   return null;
@@ -35,7 +29,7 @@ const emphasisParser = (tokens) => {
   ];
 
   if (patterns.some(pattern => matches(pattern, tokens))) {
-    return emphasisNode(tokens[1].value);
+    return node('EMPHASIS', tokens[1].value, 3);
   }
 
   return null;
@@ -43,7 +37,7 @@ const emphasisParser = (tokens) => {
 
 const textParser = (tokens) => {
   if (matches('TEXT', tokens)) {
-    return textNode(tokens[0].value);
+    return node('TEXT', tokens[0].value, 1);
   }
 
   return null;
@@ -63,7 +57,7 @@ const sentenceAndNewLinesParser = (tokens) => {
   const consumed = countConsumed(nodes);
 
   if (matches('NEWLINE NEWLINE', tokens.slice(consumed))) {
-    return paragraphNode(nodes, consumed + 2);
+    return node('PARAGRAPH', nodes, consumed + 2);
   }
 
   return null;
@@ -77,7 +71,7 @@ const bodyParser = (tokens) => {
   const nodes = matchStar(paragraphParser, tokens);
 
   if (nodes.length > 0) {
-    return bodyNode(nodes, countConsumed(nodes));
+    return node('BODY', nodes, countConsumed(nodes));
   }
 
   return null;
