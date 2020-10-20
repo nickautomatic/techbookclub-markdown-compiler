@@ -12,23 +12,49 @@
   <label for="input">Markdown:</label>
   <textarea id="input"></textarea>
 
+  <label>
+    <input type="radio" name="format" value="tokenize" checked>
+    Tokens
+  </label>
+  <label>
+    <input type="radio" name="format" value="parse">
+    Nodes
+  </label>
+  <label>
+    <input type="radio" name="format" value="render">
+    HTML
+  </label>
+
   <hr />
 
-  <label for="output">Output:</label>
+  <label for="output"><code id="outputlabel"></code></label>
   <pre id="output"></pre>
 
   <script type="module">
     import { parse } from './parser.js';
+    import { tokenize } from './tokenizer.js';
+    const render = (nodes) => 'Not yet implemented!';
+    const functions = {
+      parse, tokenize, render,
+    };
 
     const inputElement = document.getElementById('input');
     const outputElement = document.getElementById('output');
+    const outputLabel = document.getElementById('outputlabel');
+    const radioButtons = document.querySelectorAll('[name=format]');
 
     const parseInput = (event) => {
-      const output = parse(input.value);
+      const selected = document.querySelector('[name=format]:checked').value;
+      const output = functions[selected](input.value);
+
       outputElement.innerText = JSON.stringify(output, null, 2);
+      outputLabel.innerText = `${selected}:`;
     };
 
     inputElement.addEventListener('keyup', parseInput);
+    radioButtons.forEach(radioButton => {
+      radioButton.addEventListener('click', parseInput);
+    })
   </script>
 </body>
 
