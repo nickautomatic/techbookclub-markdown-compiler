@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown compiler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <label for="input">Markdown:</label>
+  <textarea id="input"></textarea>
+
+  <hr />
+
+  <label for="output">Output:</label>
+  <pre id="output"></pre>
+
+  <script type="module">
+    import { parse } from './parser.js';
+
+    const inputElement = document.getElementById('input');
+    const outputElement = document.getElementById('output');
+
+    const parseInput = (event) => {
+      const output = parse(input.value);
+      outputElement.innerText = JSON.stringify(output, null, 2);
+    };
+
+    inputElement.addEventListener('keyup', parseInput);
+  </script>
+</body>
+
+</html>

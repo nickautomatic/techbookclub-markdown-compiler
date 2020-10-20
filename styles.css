@@ -1,0 +1,13 @@
+label {
+  display: block;
+}
+
+textarea {
+  min-width: 30rem;
+  min-height: 7rem;
+}
+
+output {
+  display: block;
+  font-family: monospace;
+}
