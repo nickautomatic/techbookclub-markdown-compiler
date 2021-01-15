@@ -37,7 +37,8 @@
   <script type="module">
     import { parse } from './parser.js';
     import { tokenize } from './tokenizer.js';
-    const render = (nodes) => 'Not yet implemented!';
+    import { generate as render } from './generator.js';
+
     const functions = {
       tokenize: text => tokenize(text),
       parse: text => parse(tokenize(text)),
