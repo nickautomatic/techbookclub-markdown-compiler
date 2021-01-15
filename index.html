@@ -9,26 +9,30 @@
 </head>
 
 <body>
-  <label for="input">Markdown:</label>
-  <textarea id="input"></textarea>
+  <div class="container">
+    <div class="input">
+      <label for="input">Markdown:</label>
+      <textarea id="input"></textarea>
 
-  <label>
-    <input type="radio" name="format" value="tokenize" checked>
-    Tokens
-  </label>
-  <label>
-    <input type="radio" name="format" value="parse">
-    Nodes
-  </label>
-  <label>
-    <input type="radio" name="format" value="render">
-    HTML
-  </label>
+      <label>
+        <input type="radio" name="format" value="tokenize" checked>
+        Tokens
+      </label>
+      <label>
+        <input type="radio" name="format" value="parse">
+        Nodes
+      </label>
+      <label>
+        <input type="radio" name="format" value="render">
+        HTML
+      </label>
+    </div>
 
-  <hr />
-
-  <label for="output"><code id="outputlabel"></code></label>
-  <pre id="output"></pre>
+    <div class="output">
+      <label for="output"><code id="outputlabel"></code></label>
+      <pre id="output"></pre>
+    </div>
+  </div>
 
   <script type="module">
     import { parse } from './parser.js';
