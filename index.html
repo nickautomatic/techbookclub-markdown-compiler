@@ -39,7 +39,9 @@
     import { tokenize } from './tokenizer.js';
     const render = (nodes) => 'Not yet implemented!';
     const functions = {
-      parse, tokenize, render,
+      tokenize: text => tokenize(text),
+      parse: text => parse(tokenize(text)),
+      render: text => render(parse(tokenize(text))),
     };
 
     const inputElement = document.getElementById('input');

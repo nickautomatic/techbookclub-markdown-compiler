@@ -1,5 +1,4 @@
 import { matches, matchFirst, matchStar } from './matchers.js';
-import { tokenize } from './tokenizer.js';
 
 const node = (type, value, consumed) => ({
   type,
@@ -77,7 +76,7 @@ const bodyParser = (tokens) => {
   return null;
 }
 
-const parse = (text) => bodyParser(tokenize(text));
+const parse = (tokens) => bodyParser(tokens);
 
 export {
   boldParser,
