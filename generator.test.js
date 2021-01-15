@@ -16,4 +16,15 @@ describe('visit', () => {
 
     expect(visit(ast)).toEqual('this is a test');
   });
+
+  it('renders PARAGRAPH nodes to HTML', () => {
+    const ast = {
+      type: 'PARAGRAPH',
+      value: [
+        { type: 'TEXT', value: 'This is a paragraph' },
+      ],
+    };
+
+    expect(visit(ast)).toEqual('<p>This is a paragraph</p>');
+  });
 });
