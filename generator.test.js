@@ -27,4 +27,22 @@ describe('visit', () => {
 
     expect(visit(ast)).toEqual('<p>This is a paragraph</p>');
   });
+
+  it('renders BOLD nodes to HTML', () => {
+    const ast = {
+      type: 'BOLD',
+      value: 'This is some bold text',
+    };
+
+    expect(visit(ast)).toEqual('<strong>This is some bold text</strong>');
+  });
+
+  it('renders EMPHASIS nodes to HTML', () => {
+    const ast = {
+      type: 'EMPHASIS',
+      value: 'This is some emphasised text',
+    };
+
+    expect(visit(ast)).toEqual('<em>This is some emphasised text</em>');
+  });
 });
